@@ -30,17 +30,15 @@ print("-----formatedDisk-----")
 
 def createDir(dirName):
     if not os.path.isdir(dirName):
-        os.mkdir(dirName)
+        runCommand(["sudo","mkdir", dirName])
 
 createDir(config["paths"]["data"])
+createDir(config["paths"]["kaggle"])
+
 mountDiskCommand = ["sudo", "mount", "-o", "discard,defaults", "/dev/sdb", config["paths"]["data"]]
 runCommand(mountDiskCommand)
 
 print("-----mounted disk-----")
-
-for d in config["paths"].values():
-    createDir(d)
-    print("---created directorie : "+d)
 
 runCommand(["sudo","cp",os.path.join(config["paths"]["home"],"melanoma","kaggle.json"),
           os.path.join(config["paths"]["kaggle"],"kaggle.json")])
@@ -52,4 +50,8 @@ downloadCommand = ["kaggle", "competitions", "download", "-c", sConfig["dataset"
 runCommand(downloadCommand)
 runCommand(["unzip", sConfig["dataset"]["kaggle_competition"] + ".zip"])
 
+
+for d in config["paths"].values():
+    createDir(d)
+    print("---created directorie : "+d)
 
